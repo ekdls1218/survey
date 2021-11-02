@@ -1,0 +1,10 @@
+body{
+    background: white url("images/background.png") no-repeat;
+    background-position: right bottom; /* 왼쪽 하단에 위치*/
+}
+
+
+li a, h1, a{/* li의 a요소, h1요소, a요소 컬러를 초록으로*/
+    color: green;
+}
+

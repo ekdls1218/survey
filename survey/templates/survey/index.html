@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'survey/style.css' %}">
+</head>
+<body>
+<!--latest_question-list객체는 index()뷰 함수에서 넘겨주는 파라미터-->
+{% if latest_question_list %}
+    <ul> <!--latest_question-list객체 내용 순회하면서 question_text를 순서없는 리스트로 화면에 보여줌-->
+        {% for question in latest_question_list %}
+            <!--각 텍스트에 URL링크를 연결, 링크주소 부분은 url 템플릿 태그를 사용-->
+            <li>
+                <a href="{% url 'survey:detail' question.id %}">{{question.question_text}}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <!--만일 latest_question-list객체에 내용이 없다면 <p>태그 안에 쓴 문장 화면에 보여줌-->
+    <p>No survey are available.</p>
+{% endif %}
+</body>
+</html>

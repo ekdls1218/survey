@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'survey/style.css' %}">
+</head>
+<body>
+<h1>{{question.question_text}}</h1> <!--질문 제목으로-->
+<ul>
+    {% for choice in question.choice_set.all %} <!--질문에 연결되어 있는 모든 선택지를 가져오는 작업을 순회하면서-->
+    <!--선택지를 순서 없는 리스트로 화면에 보여주고,옆에 투표 카운트를 숫자로 보여줌,
+    vote{{choice.votes|pluralize}}는 choice.votes 값에 따라 vote 또는 votes 가 표시됨-->
+    <li>{{choice.choice_text}} -- {{choice.votes}} vote{{choice.votes|pluralize}}</li>
+    {% endfor %}
+</ul>
+
+<!--Vote Again? 이라는 문장을 보여주고, 그 문장에 URL 링크 연결-->
+<a href="{% url 'survey:detail' question.id %}">Vote again?</a><br><br>
+<!--Back? 이라는 문장을 보여주고, 그 문장에 URL 링크 연결-->
+<a href="{% url 'survey:index' %}">Back?</a>
+</body>
+</html>

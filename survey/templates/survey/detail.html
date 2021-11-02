@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'survey/style.css' %}">
+</head>
+<body>
+<h1>{{question.question_text}}</h1> <!--질문이 제목으로, 폰트 크기 <h1>-->
+<!--에러가 있으면 view()함수에서 보내주는 에러 메시지를 굵은 글자로 화면에 보여줌 -->
+{% if error_message %} <p> <strong>{{error_message}}</strong></p>{% endif %}
+<!--폼에 입력된 데이터는 POST방식으로 보내줌
+    탬플릿 태그를 사용하여 받을 곳의 URL을 survey:vote로 지정, question.id가 question_id로 전달-->
+<form action="{% url 'survey:vote' question.id %}" method="post">
+    {% csrf_token %} <!--CSRF공격을 막기 위한 수단, 방금 서버로 들어온 요청이 사이트 내부에서 온 것이 맞는지 확인하는 용도-->
+    {% for choice in question.choice_set.all %} <!--질문에 해당하는 선택지 모두 순회하면서 출력-->
+    <!--라디오버튼으로 답변 항목을 보여줌, forloop.counter(반복문의 반복 횟수를 출력하는 템플릿 문법)을 이용해 맞는 choice 할당-->
+    <input type="radio" name="choice" id="choice{{forloop.counter}}" value="{{choice.id}}">
+    <!--<label for>속성 값 = <input id>속성 값 => choice.choice_text이 라디오 버튼과 연동-->
+    <label for="choice{{forloop.counter}}">{{choice.choice_text}}</label><br>
+    {% endfor %}
+    <!-- vote 버튼을 클릭 =>사용자가 선택한 폼 데이터(POST 방식)가 polls:vote URL로 전송
+    => vote()뷰 함수에서 request.POST[‘choice’]구문으로 액서스 =>
+    <input> 태그의 name과 value 속성값들이 request.POST 사전에 key, value로 사용-->
+    <input type="submit" value="Vote">
+</form><br>
+
+<!--QuestionList? 이라는 문장을 보여주고, 그 문장에 URL 링크 연결-->
+<a href="{% url 'survey:index' %}">QuestionList?</a>
+</body>
+</html>
